@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>Arcade Game</h1>
+    <div>
+        <canvas id="canvas_work" width="800" height="600"></canvas>
+        <button id="moveButton" onclick="move()" >Go</button>
+    </div>
+    <script>
+        let canvas;
+        let canvas_ID;
+        let canvasWidth = 800;
+        let canvasHeight = 600;
+
+        let ballX = 20;
+        let ball_speed_X = 20;
+
+        let ballY = 50;
+        let ball_speed_Y = 4;
+
+        let paddle_width = 20;
+        let paddle_height = 150;
+
+        let paddle_left_X = 0;
+        let paddle_left_Y = canvasHeight/2;
+
+        let paddle_right_X = canvasWidth-paddle_width;
+        let paddle_right_Y = canvasHeight/2;
+        
+        window.onload = function() {
+            canvas_ID = document.getElementById('canvas_work')
+            canvas = canvas_ID.getContext('2d')
+            setInterval(()=> {
+                ballMovementController()
+                drawEverything()
+            }, 33)
+
+            canvas_ID.addEventListener('mousemove', (e)=> {
+                let {x, y} = handleMousePosition(e)
+                // paddle_left_X = x
+                paddle_left_Y = y
+            })   
+            
+        
+        }
+
+        function ballReset() {
+            ballX = canvasWidth / 2
+            ballY = canvasHeight / 2
+            ball_speed_X = -ball_speed_X
+        }
+        
+        function aiLogic() {
+            let paddleCenter = paddle_right_Y + (paddle_height/2)
+            if (paddleCenter < ballY) {
+                paddle_right_Y = paddle_right_Y + 5
+            } else {
+                paddle_right_Y = paddle_right_Y - 5
+            }
+        }
+
+        function ballMovementController() {
+            aiLogic()
+            ballX = ballX + ball_speed_X
+            ballY = ballY + ball_speed_Y
+
+            if (ballX > canvasWidth) {
+                if (ballY > paddle_right_Y && ballY < paddle_right_Y+paddle_height) {
+                    ball_speed_X = -ball_speed_X
+                } else {
+                    ballReset()
+                }
+            }
+            if (ballX < 0) {
+                if (ballY > paddle_left_Y && ballY < paddle_left_Y+paddle_height) {
+                    ball_speed_X = -ball_speed_X
+                } else {
+                    ballReset()
+                }
+            }
+
+            if (ballY > canvasHeight) {
+                ball_speed_Y = -ball_speed_Y
+            }
+            if (ballY < 0) {
+                ball_speed_Y = -ball_speed_Y
+            }
+        }
+
+        function drawEverything() {
+
+            canvas.fillStyle = 'grey'
+            canvas.fillRect(0, 0, canvasWidth, canvasHeight )
+            
+            canvas.fillStyle = 'red'
+            canvas.fillRect(paddle_left_X, paddle_left_Y, paddle_width, paddle_height )
+            
+            canvas.fillStyle = 'blue'
+            canvas.fillRect(paddle_right_X, paddle_right_Y, paddle_width, paddle_height )
+            
+            canvas.fillStyle = 'white'
+            canvas.beginPath();
+            canvas.arc(ballX, ballY, 10, 0, 2 * Math.PI )
+            canvas.fill()
+        }
+
+        function handleMousePosition(e) {
+            let {left, top} = canvas_ID.getBoundingClientRect()
+            let root = document.documentElement
+            let mouse_x = e.clientX - left - root.scrollLeft;
+            let mouse_y = e.clientY - top - root.scrollTop;
+            return {
+                x: mouse_x,
+                y: mouse_y
+            }
+
+        }
+
+
+    </script>
+</body>
+</html>
