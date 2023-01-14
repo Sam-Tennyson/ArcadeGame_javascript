@@ -14,6 +14,8 @@ let canvasWidth = dynamicwidth || 800;
 let canvasHeight = 600;
 let isStart = false
 
+let isGood = false
+
 let WINNING = 3
 let winner_name
 let player_1 = 0
@@ -61,41 +63,68 @@ window.onload = function() {
             ballMovementController()    
             drawEverything()
         }
-    }, 33)
-
-
-    if (navigator.userAgentData.mobile) {
-        // let {x, y} = handleMousePosition(e.changedTouches[0])
-        // if (x >=0 && x <= canvasWidth && y >=0 && y <= canvasHeight) {
-
-            canvas_ID.addEventListener('touchmove', (e)=> {
-            let {x, y} = handleMousePosition(e.changedTouches[0])
-            // paddle_left_X = x
-            
-            paddle_left_Y = y-(paddle_height/2)
-
-            })
-            canvas_ID.addEventListener('touchstart', (e)=> {
+        window.addEventListener('keypress', (e)=> {
+            console.log(e, "a")
+            if (e.key === "Enter") {
                 player_1=0
                 player_2=0
                 isStart = false
-        
-            }) 
-        // }
-    }
+            }
+    
+        }) 
+        canvas_ID.addEventListener('keypress ', (e)=> {
+            console.log("a",e)
+            if (e.key === "Enter") {
+                player_1=0
+                player_2=0
+                isStart = false
+            }
+    
+        }) 
+        if (navigator.userAgentData.mobile) {
+            // let {x, y} = handleMousePosition(e.changedTouches[0])
+            // if (x >=0 && x <= canvasWidth && y >=0 && y <= canvasHeight) {
+    
+                canvas_ID.addEventListener('touchmove', (e)=> {
+                let {x, y} = handleMousePosition(e.changedTouches[0])
+                // paddle_left_X = x
+                
+                paddle_left_Y = y-(paddle_height/2)
+    
+                })
+                if (isGood) {
+                    // debugger
+    
+                    canvas_ID.addEventListener('touchstart', (e)=> {
+                        player_1=0
+                        player_2=0
+                        isStart = false
+                        isGood = false
+                        
+                    }) 
+                }
+            // }
+        }
+    }, 33)
+
+
 
     canvas_ID.addEventListener('mousemove', (e)=> {
+        // console.log(e, "a")
         let {x, y} = handleMousePosition(e)
         paddle_left_Y = y-(paddle_height/2)
 
     })   
 
-    canvas_ID.addEventListener('mousedown touchstart', (e)=> {
-        player_1=0
-        player_2=0
-        isStart = false
+    // canvas_ID.addEventListener('keypress ', (e)=> {
+    //     console.log("a",e)
+    //     if (e.key === "Enter") {
+    //         player_1=0
+    //         player_2=0
+    //         isStart = false
+    //     }
 
-    })   
+    // })   
 
 
 }
@@ -108,10 +137,9 @@ function ballReset() {
             winner_name = "Gomu wins 😎"
         }
         isStart = true
+
         player_1 = 0
         player_2 = 0
-        let imgTagg = document.getElementById('ggoommuuuu')
-            if (imgTagg) imgTagg.remove()
     }
     ballX = canvasWidth / 2
     ballY = canvasHeight / 2
@@ -196,7 +224,7 @@ function drawEverything() {
 function start() {
 
     canvas.font = "48px serif";
-
+    isGood = true
     canvas.fillStyle="#ebae34"
     canvas.fillText(winner_name,300, 400)
 
