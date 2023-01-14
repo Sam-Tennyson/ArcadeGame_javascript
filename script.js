@@ -52,13 +52,19 @@ function handleMousePosition(e) {
 }
 
 window.ontouchmove = (e) => {
+    console.log(e)
+    e.preventDefault()
     if (navigator.userAgentData.mobile) {
-        let {x, y} = handleMousePosition(e.changedTouches[0])            
-        paddle_left_Y = y-(paddle_height/2)
+        let {x, y} = handleMousePosition(e.changedTouches[0])  
+        if (y >= 0 & y <= canvasHeight)  {
+            paddle_left_Y = y-(paddle_height/2)
+        }         
     }
 }
 
 window.ontouchend = (e) => {
+    
+    e.preventDefault()
     console.log(isGood, ">>>")
     if (isGood) {
         // debugger
@@ -75,6 +81,8 @@ window.ontouchend = (e) => {
 
 window.onkeydown = function (e) {
     // console.log("a",e)
+    
+    e.preventDefault()
     if (isWindow) {
 
         if (e.key === "Enter" && e.keyCode == "13") {
