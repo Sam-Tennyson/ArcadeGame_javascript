@@ -15,6 +15,7 @@ let canvasHeight = 600;
 let isStart = false
 
 let isGood = false
+let isWindow = false
 
 let WINNING = 3
 let winner_name
@@ -50,6 +51,41 @@ function handleMousePosition(e) {
     }
 }
 
+window.ontouchmove = (e) => {
+    if (navigator.userAgentData.mobile) {
+        let {x, y} = handleMousePosition(e.changedTouches[0])            
+        paddle_left_Y = y-(paddle_height/2)
+    }
+}
+
+window.ontouchend = (e) => {
+    console.log(isGood, ">>>")
+    if (isGood) {
+        // debugger
+
+        // canvas_ID.addEventListener('touchstart', (e)=> {
+            player_1=0
+            player_2=0
+            isStart = false
+            isGood = false
+            
+        // }) 
+    }
+}
+
+window.onkeydown = function (e) {
+    // console.log("a",e)
+    if (isWindow) {
+
+        if (e.key === "Enter" && e.keyCode == "13") {
+            player_1=0
+            player_2=0
+            isStart = false
+            isWindow = false
+        }
+    }
+}
+
 window.onload = function() {
     canvas_ID = document.getElementById('canvas_work')
     canvas = canvas_ID.getContext('2d')
@@ -62,70 +98,20 @@ window.onload = function() {
             if (imgTagg) imgTagg.remove()
             ballMovementController()    
             drawEverything()
+            handleButtonMovement()
         }
-        window.addEventListener('keypress', (e)=> {
-            console.log(e, "a")
-            if (e.key === "Enter") {
-                player_1=0
-                player_2=0
-                isStart = false
-            }
-    
-        }) 
-        canvas_ID.addEventListener('keypress ', (e)=> {
-            console.log("a",e)
-            if (e.key === "Enter") {
-                player_1=0
-                player_2=0
-                isStart = false
-            }
-    
-        }) 
-        if (navigator.userAgentData.mobile) {
-            // let {x, y} = handleMousePosition(e.changedTouches[0])
-            // if (x >=0 && x <= canvasWidth && y >=0 && y <= canvasHeight) {
-    
-                canvas_ID.addEventListener('touchmove', (e)=> {
-                let {x, y} = handleMousePosition(e.changedTouches[0])
-                // paddle_left_X = x
-                
-                paddle_left_Y = y-(paddle_height/2)
-    
-                })
-                if (isGood) {
-                    // debugger
-    
-                    canvas_ID.addEventListener('touchstart', (e)=> {
-                        player_1=0
-                        player_2=0
-                        isStart = false
-                        isGood = false
-                        
-                    }) 
-                }
-            // }
-        }
+        
     }, 33)
+}
 
-
-
+function handleButtonMovement() {
+    let canvas_ID =document.getElementById('canvas_work')  
     canvas_ID.addEventListener('mousemove', (e)=> {
         // console.log(e, "a")
         let {x, y} = handleMousePosition(e)
         paddle_left_Y = y-(paddle_height/2)
 
     })   
-
-    // canvas_ID.addEventListener('keypress ', (e)=> {
-    //     console.log("a",e)
-    //     if (e.key === "Enter") {
-    //         player_1=0
-    //         player_2=0
-    //         isStart = false
-    //     }
-
-    // })   
-
 
 }
 
@@ -225,6 +211,7 @@ function start() {
 
     canvas.font = "48px serif";
     isGood = true
+    isWindow = true
     canvas.fillStyle="#ebae34"
     canvas.fillText(winner_name,300, 400)
 
