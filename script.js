@@ -224,7 +224,7 @@ function start() {
     canvas.fillText(winner_name,300, 400)
 
     canvas.fillStyle="#ebae34"
-    canvas.fillText(`Ready To Start Again`,200, 500)
+    canvas.fillText(`Press Enter to Start Again`,200, 500)
 
     let imgTag = document.createElement('img');
     let imgTagg = document.getElementById('ggoommuuuu')
